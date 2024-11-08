@@ -6,11 +6,12 @@ namespace MVC.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
 
-    public HomeController(ILogger<HomeController> logger)
+    private readonly ProductoRepository productoRepository;
+
+    public HomeController()
     {
-        _logger = logger;
+        productoRepository = new ProductoRepository(@"Data Source=db/Tienda.db;Cache=Shared");
     }
 
     public IActionResult Index()
@@ -20,6 +21,17 @@ public class HomeController : Controller
 
     public IActionResult Privacy()
     {
+        return View();
+    }
+    [HttpGet]
+    public IActionResult Listar()
+    {
+        List<Producto> ListaProd = productoRepository.GetAll();
+        return View(ListaProd);
+    }
+    public IActionResult Crear()
+    {
+        
         return View();
     }
 
