@@ -6,14 +6,6 @@ namespace MVC.Controllers;
 
 public class HomeController : Controller
 {
-
-    private readonly ProductoRepository productoRepository;
-
-    public HomeController()
-    {
-        productoRepository = new ProductoRepository(@"Data Source=db/Tienda.db;Cache=Shared");
-    }
-
     public IActionResult Index()
     {
         return View();
@@ -21,17 +13,6 @@ public class HomeController : Controller
 
     public IActionResult Privacy()
     {
-        return View();
-    }
-    [HttpGet]
-    public IActionResult Listar()
-    {
-        List<Producto> ListaProd = productoRepository.GetAll();
-        return View(ListaProd);
-    }
-    public IActionResult Crear()
-    {
-        
         return View();
     }
 
