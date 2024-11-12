@@ -39,5 +39,16 @@ public class ProductoController : Controller
         productoRepository.Modify(producto);
         return RedirectToAction("Listar");
     }
-    
+    [HttpGet]
+    public IActionResult EliminarProducto(int id)
+    {
+        Producto prod = productoRepository.Get(id);
+        return View(prod);
+    }
+    [HttpPost]
+    public IActionResult BorrarProducto(Producto producto)
+    {
+        productoRepository.Delete(producto);
+        return RedirectToAction("Listar");
+    }
 }
