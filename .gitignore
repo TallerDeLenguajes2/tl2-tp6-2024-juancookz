@@ -34,7 +34,6 @@ appsettings.Production.json
 
 # Logs and database files
 *.log
-*.db
 *.sqlite
 
 # Visual Studio Code specific
