@@ -1,13 +1,29 @@
 @model List<Producto>
-@{
-    ViewData["Title"] = "Lista de productos";
-}
-<h1>@ViewData["Title"]</h1>
-<p>
-    <ul>
+    <h2>Lista de Productos</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Descripción</th>
+            <th>Precio</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
         @foreach (var producto in Model)
         {
-            <li>@(producto.Descripcion)</li>
+            <tr>
+                <td>@producto.Descripcion</td>
+                <td>$ @producto.Precio</td>
+                <td>
+                    <a asp-controller="Producto" asp-action="ModificarProducto" asp-route-id="@producto.Idproducto" class="btn btn-warning">Editar</a>
+                    <a asp-controller="Producto" asp-action="EliminarProducto" asp-route-id="@producto.Idproducto" class="btn btn-danger">Eliminar</a>
+                </td>
+            </tr>
         }
-    </ul>
-</p>
+    </tbody>
+</table>
+
+<div class="text-center">
+    <a asp-controller="Producto" asp-action="AltaProducto" class="btn btn-success">Alta producto</a>
+</div>
