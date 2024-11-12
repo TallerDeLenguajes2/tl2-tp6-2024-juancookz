@@ -5,7 +5,7 @@
     <thead>
         <tr>
             <th>Descripción</th>
-            <th>Precio</th>
+            <th>Precio ($ ARS)</th>
             <th>Acciones</th>
         </tr>
     </thead>
@@ -14,9 +14,9 @@
         {
             <tr>
                 <td>@producto.Descripcion</td>
-                <td>$ @producto.Precio</td>
+                <td>@producto.Precio</td>
                 <td>
-                    <a asp-controller="Producto" asp-action="ModificarProducto" asp-route-id="@producto.Idproducto" class="btn btn-warning">Editar</a>
+                    <a asp-controller="Producto" asp-action="ModificarProducto" asp-route-id="@producto.Idproducto" class="btn btn-secondary">Editar</a>
                     <a asp-controller="Producto" asp-action="EliminarProducto" asp-route-id="@producto.Idproducto" class="btn btn-danger">Eliminar</a>
                 </td>
             </tr>
