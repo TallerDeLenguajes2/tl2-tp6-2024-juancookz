@@ -16,4 +16,15 @@ public class ProductoController : Controller
         List<Producto> ListaProd = productoRepository.GetAll();
         return View(ListaProd);
     }
+    [HttpGet]
+    public IActionResult AltaProducto()
+    {
+        return View();
+    }
+    [HttpPost]
+    public IActionResult CrearProducto(Producto producto)
+    {
+        productoRepository.Create(producto);
+        return RedirectToAction("Listar");
+    }
 }
