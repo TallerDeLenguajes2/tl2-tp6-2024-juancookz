@@ -1,0 +1,29 @@
+@model List<Presupuesto>
+    <h2>Lista de Presupuestos</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Fecha de creacion</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var presupuesto in Model)
+        {
+            <tr>
+                <td>@presupuesto.NombreDestinatario</td>
+                <td>@presupuesto.FechaCreacion</td>
+                <td>
+                    <a asp-controller="Presupuesto" asp-action="ModificarPresupuesto" asp-route-id="@presupuesto.IdPresupuesto" class="btn btn-secondary">Editar</a>
+                    <a asp-controller="Presupuesto" asp-action="EliminarPresupuesto" asp-route-id="@presupuesto.IdPresupuesto" class="btn btn-danger">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="text-center">
+    <a asp-controller="Presupuesto" asp-action="AltaPresupuesto" class="btn btn-success">Alta presupuesto</a>
+</div>
