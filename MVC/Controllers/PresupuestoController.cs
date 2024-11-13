@@ -14,4 +14,10 @@ public class PresupuestoController : Controller
         List<Presupuesto> ListaPresup = presupuestoRepository.GetAll();
         return View(ListaPresup);
     }
+    [HttpGet]
+    public IActionResult VerPresupuesto(int id)
+    {
+        Presupuesto presupuesto = presupuestoRepository.GetById(id);
+        return View(presupuesto);
+    }
 }
