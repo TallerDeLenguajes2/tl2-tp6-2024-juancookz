@@ -31,4 +31,10 @@ public class PresupuestoController : Controller
         presupuestoRepository.Create(presupuesto);
         return RedirectToAction("Listar");
     }
+    [HttpGet]
+    public IActionResult ModificarPresupuesto(int id)
+    {
+        Presupuesto pres = presupuestoRepository.GetById(id);
+        return View(pres);
+    }
 }

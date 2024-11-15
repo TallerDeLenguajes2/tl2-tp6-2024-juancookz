@@ -119,6 +119,26 @@ public class PresupuestoRepository
         }
         return true;
     }
+    public bool DeleteProduct(int idProducto, int idPresupuesto)
+    {
+        var productoRepository = new ProductoRepository(_stringConnection);
+        if (GetById(idPresupuesto) == null || productoRepository.Get(idProducto) == null)
+        {
+            return false;
+        }
+        string query = @"DELETE FROM PresupuestosDetalle
+                            WHERE idPresupuesto = @idPresupuesto AND idProducto = @idProducto;";
+        using (SqliteConnection connection = new SqliteConnection(_stringConnection))
+        {
+            connection.Open();
+            SqliteCommand command = new SqliteCommand(query, connection);
+            command.Parameters.AddWithValue("@idPresupuesto", idPresupuesto);
+            command.Parameters.AddWithValue("@idProducto", idProducto);
+            command.ExecuteNonQuery();
+            connection.Close();
+        }
+        return true;
+    }
     public void Delete(int idPresupuesto)
     {
         string query = @"DELETE FROM Presupuestos WHERE idPresupuesto = @IdP;";
