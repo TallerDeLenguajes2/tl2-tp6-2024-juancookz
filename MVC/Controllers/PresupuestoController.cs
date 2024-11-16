@@ -32,9 +32,15 @@ public class PresupuestoController : Controller
         return RedirectToAction("Listar");
     }
     [HttpGet]
-    public IActionResult ModificarPresupuesto(int id)
+    public IActionResult EliminarPresupuesto(int id)
     {
         Presupuesto pres = presupuestoRepository.GetById(id);
         return View(pres);
+    }
+    [HttpPost]
+    public IActionResult BorrarPresupuesto(Presupuesto presupuesto)
+    {
+        presupuestoRepository.Delete(presupuesto.IdPresupuesto);
+        return RedirectToAction("Listar");
     }
 }
