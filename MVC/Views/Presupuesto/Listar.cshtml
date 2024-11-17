@@ -15,7 +15,7 @@
         @foreach (var presupuesto in Model)
         {
             <tr>
-                <td>@presupuesto.NombreDestinatario</td>
+                <td>@presupuesto.Cliente.Nombre</td>
                 <td>@presupuesto.FechaCreacion</td>
                 <td>
                     <a asp-controller="Presupuesto" asp-action="VerPresupuesto" asp-route-id="@presupuesto.IdPresupuesto"

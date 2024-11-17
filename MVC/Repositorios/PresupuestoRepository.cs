@@ -8,14 +8,14 @@ public class PresupuestoRepository
     }
     public void Create(Presupuesto presupuesto)
     {
-        string query = @"INSERT INTO Presupuestos (NombreDestinatario, FechaCreacion) 
-        VALUES (@NombreDestinatario, @FechaCreacion);";
+        string query = @"INSERT INTO Presupuestos (ClienteId, FechaCreacion) 
+        VALUES (@ClienteId, @FechaCreacion);";
         using (var connection = new SqliteConnection(_stringConnection))
         {
             connection.Open();
             SqliteCommand command = new SqliteCommand(query, connection);
 
-            command.Parameters.Add(new SqliteParameter("@NombreDestinatario", presupuesto.NombreDestinatario));
+            command.Parameters.Add(new SqliteParameter("@ClienteId", presupuesto.Cliente.ClienteId));
             command.Parameters.Add(new SqliteParameter("@FechaCreacion", presupuesto.FechaCreacion));
             command.ExecuteNonQuery();
 
@@ -26,19 +26,41 @@ public class PresupuestoRepository
     {
         List<Presupuesto> presupuestos = [];
 
-        string query = @"SELECT P.idPresupuesto, P.NombreDestinatario, P.FechaCreacion FROM Presupuestos P;";
+        string query = @"SELECT idPresupuesto,
+                                FechaCreacion,
+                                P.ClienteId,
+                                COALESCE(C.Nombre, 'No se asigno cliente') AS Cliente,
+                                C.Email,
+                                C.Telefono
+                            FROM Presupuestos p
+                                LEFT JOIN
+                                Clientes C ON P.ClienteId = C.ClienteId;";
+        Cliente cliente = new Cliente();
+
         using (SqliteConnection connection = new SqliteConnection(_stringConnection))
         {
             connection.Open();
             SqliteCommand command = new SqliteCommand(query, connection);
-            var reader = command.ExecuteReader();
-            while (reader.Read())
+            using (var reader = command.ExecuteReader())
             {
-                var presupuesto = new Presupuesto();
-                presupuesto.IdPresupuesto = Convert.ToInt32(reader["idPresupuesto"]);
-                presupuesto.NombreDestinatario = reader["NombreDestinatario"].ToString();
-                presupuesto.FechaCreacion = Convert.ToDateTime(reader["FechaCreacion"]);
-                presupuestos.Add(presupuesto);
+                while (reader.Read())
+                {
+                    if (!reader.IsDBNull(reader.GetOrdinal("ClienteId")))
+                    {
+                        cliente = new Cliente();
+                        cliente.ClienteId = Convert.ToInt32(reader["ClienteId"]);
+                        cliente.Nombre = reader["Cliente"].ToString();
+                        cliente.Email = reader["Email"].ToString();
+                        cliente.Telefono = reader["Telefono"].ToString();
+                    }
+
+                    var presupuesto = new Presupuesto();
+
+                    presupuesto.IdPresupuesto = Convert.ToInt32(reader["idPresupuesto"]);
+                    presupuesto.Cliente = cliente;
+                    presupuesto.FechaCreacion = Convert.ToDateTime(reader["FechaCreacion"]);
+                    presupuestos.Add(presupuesto);
+                }
             }
             connection.Close();
         }
@@ -49,28 +71,34 @@ public class PresupuestoRepository
         Presupuesto presupuesto = new Presupuesto();
         int presupuestoEncontrado = 0;
         string query = @"SELECT 
-                    P.idPresupuesto,
-                    P.NombreDestinatario,
-                    P.FechaCreacion,
-                    PR.idProducto,
-                    PR.Descripcion AS Producto,
-                    PR.Precio,
-                    PD.Cantidad,
-                    (PR.Precio * PD.Cantidad) AS Subtotal
-                FROM 
-                    Presupuestos P
-                LEFT JOIN 
-                    PresupuestosDetalle PD ON P.idPresupuesto = PD.idPresupuesto
-                LEFT JOIN 
-                    Productos PR ON PD.idProducto = PR.idProducto
-                WHERE 
-                    P.idPresupuesto = @idPresupuesto;";
+                                P.idPresupuesto,
+                                P.ClienteId,
+                                P.FechaCreacion,
+                                PR.idProducto,
+                                PR.Descripcion AS Producto,
+                                PR.Precio,
+                                PD.Cantidad,
+                                (PR.Precio * PD.Cantidad) AS Subtotal,
+                                COALESCE(C.Nombre, 'No se asigno cliente') AS Cliente,
+                                C.Email,
+                                C.Telefono
+                            FROM 
+                                Presupuestos P
+                            LEFT JOIN 
+                                PresupuestosDetalle PD ON P.idPresupuesto = PD.idPresupuesto
+                            LEFT JOIN 
+                                Productos PR ON PD.idProducto = PR.idProducto
+                            LEFT JOIN
+                                Clientes C ON P.ClienteId = C.ClienteId
+                            WHERE 
+                                P.idPresupuesto = @idPresupuesto;";
 
         using (SqliteConnection connection = new SqliteConnection(_stringConnection))
         {
             connection.Open();
             SqliteCommand command = new SqliteCommand(query, connection);
             command.Parameters.AddWithValue("@idPresupuesto", idPresupuesto);
+            Cliente cliente = new Cliente();
             using (var reader = command.ExecuteReader())
             {
                 while (reader.Read())
@@ -78,8 +106,16 @@ public class PresupuestoRepository
                     //Si encuentro un presupuesto
                     if (presupuestoEncontrado == 0)
                     {
+                        if (!reader.IsDBNull(reader.GetOrdinal("ClienteId")))
+                        {
+                            cliente = new Cliente();
+                            cliente.ClienteId = Convert.ToInt32(reader["ClienteId"]);
+                            cliente.Nombre = reader["Cliente"].ToString();
+                            cliente.Email = reader["Email"].ToString();
+                            cliente.Telefono = reader["Telefono"].ToString();
+                        }
                         presupuesto.IdPresupuesto = Convert.ToInt32(reader["idPresupuesto"]);
-                        presupuesto.NombreDestinatario = reader["NombreDestinatario"].ToString();
+                        presupuesto.Cliente = cliente;
                         presupuesto.FechaCreacion = Convert.ToDateTime(reader["FechaCreacion"]);
                         presupuesto.Detalle = [];
                         presupuestoEncontrado++;

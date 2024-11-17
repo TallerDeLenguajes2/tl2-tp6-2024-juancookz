@@ -4,8 +4,8 @@
 <form asp-controller="Presupuesto" asp-action="BorrarPresupuesto" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-group">
-        <label asp-for="NombreDestinatario">Nombre</label>
-        <input asp-for="NombreDestinatario" value="@Model.NombreDestinatario" class="form-control" readonly />
+        <label asp-for="Cliente.ClienteId">Nombre</label>
+        <input asp-for="Cliente.ClienteId" value="@Model.Cliente.ClienteId" class="form-control" readonly />
     </div>
     <div class="form-group">
         <label asp-for="FechaCreacion">Fecha de creacion</label>
