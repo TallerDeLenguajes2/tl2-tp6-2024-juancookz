@@ -95,4 +95,19 @@ public class ClienteRepository
             connection.Close();
         }
     }
+    public void Modify(Cliente cliente)
+    {
+        string query = @"UPDATE Clientes SET Nombre = @Nombre, Email = @Email, Telefono = @Telefono WHERE ClienteId = @ClienteId";
+        using (SqliteConnection connection = new SqliteConnection(_stringConnection))
+        {
+            connection.Open();
+            SqliteCommand command = new SqliteCommand(query, connection);
+            command.Parameters.AddWithValue("@Nombre", cliente.Nombre);
+            command.Parameters.AddWithValue("@Email", cliente.Email);
+            command.Parameters.AddWithValue("@Telefono", cliente.Telefono);
+            command.Parameters.AddWithValue("@ClienteId", cliente.ClienteId);
+            command.ExecuteNonQuery();
+            connection.Close();
+        }
+    }
 }
