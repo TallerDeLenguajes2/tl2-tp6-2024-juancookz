@@ -83,14 +83,14 @@ public class ClienteRepository
             return cliente;
         }
     }
-    public void Delete(int id)
+    public void Delete(Cliente cliente)
     {
         string query = @"DELETE FROM Clientes WHERE ClienteId = @ClienteId;";
         using (SqliteConnection connection = new SqliteConnection(_stringConnection))
         {
             connection.Open();
             SqliteCommand command = new SqliteCommand(query, connection);
-            command.Parameters.AddWithValue("@ClienteId", id);
+            command.Parameters.AddWithValue("@ClienteId", cliente.ClienteId);
             command.ExecuteNonQuery();
             connection.Close();
         }

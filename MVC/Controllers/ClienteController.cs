@@ -34,4 +34,25 @@ public class ClienteController : Controller
         clienteRepository.Modify(cliente);
         return RedirectToAction("Listar");
     }
+    [HttpGet]
+    public IActionResult EliminarCliente(int id)
+    {
+        Cliente cliente = clienteRepository.GetById(id);
+        return View(cliente);
+    }
+    [HttpPost]
+    public IActionResult BorrarCliente(Cliente cliente)
+    {
+        try
+        {
+            clienteRepository.Delete(cliente);
+            return RedirectToAction("Listar");
+        }
+        catch (System.Exception)
+        {
+            TempData["Error"] = "No se pudo eliminar el cliente porque tiene presupuestos asociados.";
+            return RedirectToAction("EliminarCliente", new { id = cliente.ClienteId });
+        }
+    }
+
 }
