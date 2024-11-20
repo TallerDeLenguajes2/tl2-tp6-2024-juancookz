@@ -1,0 +1,22 @@
+@model Cliente
+<h2>Modificar cliente</h2>
+<form asp-action="ActualizarCliente" asp-controller="Cliente" method="post">
+    <div class="form-group">
+        <label asp-for="Nombre">Nombre</label>
+        <input asp-for="Nombre" value="@Model.Nombre" class="form-control" type="text" required />
+    </div>
+    <div class="form-group">
+        <label asp-for="Email">Email</label>
+        <input asp-for="Email" value="@Model.Email" class="form-control" type="email" required />
+    </div>
+    <div class="form-group">
+        <label asp-for="Telefono">Telefono</label>
+        <input asp-for="Telefono" value="@Model.Telefono" class="form-control" type="tel" required />
+    </div>
+    <div class="mt-3">
+        <button type="submit" class="btn btn-primary">Modificar</button>
+        <a asp-action="Listar" class="btn btn-secondary">Cancelar</a>
+    </div>
+    <input type="hidden" asp-for="ClienteId" />
+
+</form>

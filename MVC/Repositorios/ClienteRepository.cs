@@ -69,7 +69,7 @@ public class ClienteRepository
             {
                 if (reader.Read())
                 {
-                    cliente.ClienteId = Convert.ToInt32(reader["Descripcion"]);
+                    cliente.ClienteId = Convert.ToInt32(reader["ClienteId"]);
                     cliente.Nombre = reader["Nombre"].ToString();
                     cliente.Email = reader["Email"].ToString();
                     cliente.Telefono = reader["Telefono"].ToString();
@@ -90,7 +90,7 @@ public class ClienteRepository
         {
             connection.Open();
             SqliteCommand command = new SqliteCommand(query, connection);
-            command.Parameters.AddWithValue("@id", id);
+            command.Parameters.AddWithValue("@ClienteId", id);
             command.ExecuteNonQuery();
             connection.Close();
         }

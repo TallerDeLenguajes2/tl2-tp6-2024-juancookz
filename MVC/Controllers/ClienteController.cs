@@ -22,4 +22,16 @@ public class ClienteController : Controller
         clienteRepository.Create(cliente);
         return RedirectToAction("Listar");
     }
+    [HttpGet]
+    public IActionResult ModificarCliente(int id)
+    {
+        Cliente cliente = clienteRepository.GetById(id);
+        return View(cliente);
+    }
+    [HttpPost]
+    public IActionResult ActualizarCliente(Cliente cliente)
+    {
+        clienteRepository.Modify(cliente);
+        return RedirectToAction("Listar");
+    }
 }
