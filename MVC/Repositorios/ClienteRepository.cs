@@ -37,7 +37,7 @@ public class ClienteRepository
     public List<Cliente> GetAll()
     {
         List<Cliente> clientes = new List<Cliente>();
-        string query = @"SELECT ClienteId, Nombre, Email, Telefono FROM Clientes;";
+        string query = @"SELECT ClienteId, Nombre, Email, Telefono FROM Clientes ORDER BY Nombre ASC;";
         using (var connection = new SqliteConnection(_stringConnection))
         {
             connection.Open();

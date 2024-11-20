@@ -11,5 +11,15 @@ public class ClienteController : Controller
         var clientes = clienteRepository.GetAll();
         return View(clientes);
     }
-    
+    [HttpGet]
+    public IActionResult AltaCliente()
+    {
+        return View();
+    }
+    [HttpPost]
+    public IActionResult CrearCliente(Cliente cliente)
+    {
+        clienteRepository.Create(cliente);
+        return RedirectToAction("Listar");
+    }
 }
