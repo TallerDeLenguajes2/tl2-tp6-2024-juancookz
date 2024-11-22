@@ -5,9 +5,14 @@ namespace MVC.Controllers;
 public class PresupuestoController : Controller
 {
     private readonly PresupuestoRepository presupuestoRepository;
+    private readonly ProductoRepository productoRepository;
+    private readonly ClienteRepository clienteRepository;
+
     public PresupuestoController()
     {
         presupuestoRepository = new PresupuestoRepository(@"Data Source=db/Tienda.db;Cache=Shared");
+        clienteRepository = new ClienteRepository(@"Data Source=db/Tienda.db;Cache=Shared");
+        productoRepository = new ProductoRepository(@"Data Source=db/Tienda.db;Cache=Shared");
     }
     public IActionResult Listar()
     {
@@ -42,5 +47,22 @@ public class PresupuestoController : Controller
     {
         presupuestoRepository.Delete(presupuesto.IdPresupuesto);
         return RedirectToAction("Listar");
+    }
+    [HttpGet]
+    public IActionResult ModificarPresupuesto(int id)
+    {
+        var viewModel = new ModificarPresupuestoViewModel();
+        viewModel.Presupuesto = presupuestoRepository.GetById(id);
+        viewModel.Clientes = clienteRepository.GetAll();
+        viewModel.Productos = productoRepository.GetAll();
+
+        return View(viewModel);
+    }
+    [HttpPost]
+    public IActionResult AgregarProductoPresupuesto(ModificarPresupuestoViewModel viewModel)
+    {
+        presupuestoRepository.AddProduct(viewModel.idProductoSeleccionado, viewModel.Presupuesto.IdPresupuesto, viewModel.CantidadSeleccionada);
+        
+        return RedirectToAction("ModificarPresupuesto", new { id = viewModel.Presupuesto.IdPresupuesto });
     }
 }
