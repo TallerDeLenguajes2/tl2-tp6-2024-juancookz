@@ -142,7 +142,7 @@ public class PresupuestoRepository
         {
             return false;
         }
-        string query = @"INSERT INTO PresupuestosDetalle (idPresupuesto, idProducto, Cantidad) VALUES (@idPresupuesto, @idProducto, @cantidad);";
+        string query = @"INSERT INTO PresupuestosDetalle (idPresupuesto, idProducto, Cantidad) VALUES (@idPresupuesto, @idProducto, @cantidad) ON CONFLICT(idPresupuesto, idProducto) DO UPDATE SET Cantidad = Cantidad + @cantidad;";
         using (SqliteConnection connection = new SqliteConnection(_stringConnection))
         {
             connection.Open();

@@ -71,4 +71,24 @@ public class PresupuestoController : Controller
         presupuestoRepository.DeleteProduct(viewModel.idProductoSeleccionado, viewModel.Presupuesto.IdPresupuesto);
         return RedirectToAction("ModificarPresupuesto", new { id = viewModel.Presupuesto.IdPresupuesto });
     }
+    [HttpPost]
+    public IActionResult SumarCantidadProducto(ModificarPresupuestoViewModel viewModel)
+    {
+        presupuestoRepository.AddProduct(viewModel.idProductoSeleccionado, viewModel.Presupuesto.IdPresupuesto, 1);
+        return RedirectToAction("ModificarPresupuesto", new { id = viewModel.Presupuesto.IdPresupuesto });
+    }
+    [HttpPost]
+    public IActionResult RestarCantidadProducto(ModificarPresupuestoViewModel viewModel)
+    {
+        int cant = viewModel.Presupuesto.Detalle.FirstOrDefault(dp => dp.Producto.Idproducto == viewModel.idProductoSeleccionado).Cantidad;
+        if (cant > 1)
+        {
+            presupuestoRepository.AddProduct(viewModel.idProductoSeleccionado, viewModel.Presupuesto.IdPresupuesto, -1);
+        }
+        else
+        {
+            presupuestoRepository.DeleteProduct(viewModel.idProductoSeleccionado, viewModel.Presupuesto.IdPresupuesto);
+        }
+        return RedirectToAction("ModificarPresupuesto", new { id = viewModel.Presupuesto.IdPresupuesto });
+    }
 }

@@ -44,7 +44,7 @@
                 <td class="text-end p-2">
                     <!-- Remove Product -->
                     <form asp-controller="Presupuesto" asp-action="EliminarProducto" method="post" class="d-inline">
-                        <input type="hidden" asp-for="idProductoSeleccionado" value="@detalle.Producto.Idproducto"/>
+                        <input type="hidden" asp-for="idProductoSeleccionado" value="@detalle.Producto.Idproducto" />
                         <input type="hidden" asp-for="Presupuesto.IdPresupuesto" />
                         <a onclick="this.closest('form').submit();" class="link-opacity-100 text-danger"
                             style="cursor: pointer;">Eliminar</a>
@@ -53,14 +53,13 @@
                 <td>@detalle.Producto.Precio</td>
                 <td>@detalle.Cantidad</td>
                 <td>
-                    <!-- Decrease Quantity -->
-                    <form asp-controller="Presupuesto" asp-action="ModificarCantidad" method="post"
+                    <form asp-controller="Presupuesto" asp-action="SumarCantidadProducto" method="post"
                         style="display: inline;">
-                        <input type="hidden" name="idPresupuesto" value="@Model.Presupuesto.IdPresupuesto" />
-                        <input type="hidden" name="idProducto" value="@detalle.Producto.Idproducto" />
-                        <input type="hidden" name="accion" value="decrease" />
-                        <button type="submit" class="btn btn-warning btn-sm">Disminuir</button>
+                        <input type="hidden" asp-for="Presupuesto.IdPresupuesto" />
+                        <input type="hidden" asp-for="idProductoSeleccionado" value="@detalle.Producto.Idproducto" />
+                        <button type="submit" class="btn btn-warning btn-sm">Sumar</button>
                     </form>
+
                 </td>
             </tr>
         }
