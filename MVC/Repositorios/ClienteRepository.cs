@@ -11,13 +11,11 @@ public class ClienteRepository
     public void Create(Cliente cliente)
     {
         string query = @"INSERT INTO Clientes (
-                         ClienteId,
                          Nombre,
                          Email,
                          Telefono
                      )
                      VALUES (
-                         @ClienteId,
                          @Nombre,
                          @Email,
                          @Telefono
@@ -26,7 +24,6 @@ public class ClienteRepository
         {
             connection.Open();
             SqliteCommand command = new SqliteCommand(query, connection);
-            command.Parameters.AddWithValue("@ClienteId", cliente.ClienteId);
             command.Parameters.AddWithValue("@Nombre", cliente.Nombre);
             command.Parameters.AddWithValue("@Email", cliente.Email);
             command.Parameters.AddWithValue("@Telefono", cliente.Telefono);
