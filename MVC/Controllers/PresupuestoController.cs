@@ -31,9 +31,9 @@ public class PresupuestoController : Controller
         return View();
     }
     [HttpPost]
-    public IActionResult CrearPresupuesto(Presupuesto presupuesto)
+    public IActionResult CrearPresupuesto(CrearPresupuestoViewModel viewModel)
     {
-        presupuestoRepository.Create(presupuesto);
+        presupuestoRepository.Create(viewModel.presupuesto);
         return RedirectToAction("Listar");
     }
     [HttpGet]
@@ -62,7 +62,13 @@ public class PresupuestoController : Controller
     public IActionResult AgregarProductoPresupuesto(ModificarPresupuestoViewModel viewModel)
     {
         presupuestoRepository.AddProduct(viewModel.idProductoSeleccionado, viewModel.Presupuesto.IdPresupuesto, viewModel.CantidadSeleccionada);
-        
+
+        return RedirectToAction("ModificarPresupuesto", new { id = viewModel.Presupuesto.IdPresupuesto });
+    }
+    [HttpPost]
+    public IActionResult EliminarProducto(ModificarPresupuestoViewModel viewModel)
+    {
+        presupuestoRepository.DeleteProduct(viewModel.idProductoSeleccionado, viewModel.Presupuesto.IdPresupuesto);
         return RedirectToAction("ModificarPresupuesto", new { id = viewModel.Presupuesto.IdPresupuesto });
     }
 }

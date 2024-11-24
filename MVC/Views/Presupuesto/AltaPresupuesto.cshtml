@@ -1,13 +1,19 @@
-@model Presupuesto
+@model CrearPresupuestoViewModel
 <h2>Crear presupuesto</h2>
 <form asp-action="CrearPresupuesto" asp-controller="Presupuesto" method="post">
     <div class="form-group">
-        <label asp-for="Cliente.ClienteId">Nombre</label>
-        <input asp-for="Cliente.ClienteId" class="form-control" required />
+        <label asp-for="presupuesto.Cliente">Nombre</label>
+        <select asp-for="clienteSeleccionado" class="form-control" required>
+            <option value="" selected>Seleccione un cliente</option>
+            @foreach (var cliente in Model.Clientes)
+            {
+                <option value="@cliente.ClienteId">@cliente.Nombre</option>
+            }
+        </select>
     </div>
     <div class="form-group">
-        <label asp-for="FechaCreacion">Fecha</label>
-        <input asp-for="FechaCreacion" class="form-control" type="datetime-local"
+        <label asp-for="@Model.presupuesto.FechaCreacion">Fecha</label>
+        <input asp-for="@Model.presupuesto.FechaCreacion" class="form-control" type="datetime-local"
             value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" readonly />
     </div>
     <div class="mt-3">
