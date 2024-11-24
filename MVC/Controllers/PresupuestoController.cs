@@ -28,12 +28,15 @@ public class PresupuestoController : Controller
     [HttpGet]
     public IActionResult AltaPresupuesto()
     {
-        return View();
+        var viewModel = new CrearPresupuestoViewModel(clienteRepository.GetAll());
+        return View(viewModel);
     }
     [HttpPost]
     public IActionResult CrearPresupuesto(CrearPresupuestoViewModel viewModel)
     {
-        presupuestoRepository.Create(viewModel.presupuesto);
+        Cliente cliente = new Cliente(viewModel.ClienteSeleccionado);
+        var presupuesto = new Presupuesto(cliente, DateTime.Now);
+        presupuestoRepository.Create(presupuesto);
         return RedirectToAction("Listar");
     }
     [HttpGet]
@@ -80,8 +83,7 @@ public class PresupuestoController : Controller
     [HttpPost]
     public IActionResult RestarCantidadProducto(ModificarPresupuestoViewModel viewModel)
     {
-        int cant = viewModel.Presupuesto.Detalle.FirstOrDefault(dp => dp.Producto.Idproducto == viewModel.idProductoSeleccionado).Cantidad;
-        if (cant > 1)
+        if (viewModel.CantidadSeleccionada > 1)
         {
             presupuestoRepository.AddProduct(viewModel.idProductoSeleccionado, viewModel.Presupuesto.IdPresupuesto, -1);
         }

@@ -33,7 +33,6 @@
             <th>Eliminar</th>
             <th>Precio</th>
             <th>Cantidad</th>
-            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
@@ -51,20 +50,26 @@
                     </form>
                 </td>
                 <td>@detalle.Producto.Precio</td>
-                <td>@detalle.Cantidad</td>
                 <td>
+                    <form asp-controller="Presupuesto" asp-action="RestarCantidadProducto" method="post"
+                        style="display: inline;">
+                        <input type="hidden" asp-for="Presupuesto.IdPresupuesto" />
+                        <input type="hidden" asp-for="idProductoSeleccionado" value="@detalle.Producto.Idproducto" />
+                        <input type="hidden" asp-for="CantidadSeleccionada" value="@detalle.Cantidad" />
+                        <button type="submit" class="btn btn-warning btn-sm">-</button>
+                    </form>
+                    @detalle.Cantidad
                     <form asp-controller="Presupuesto" asp-action="SumarCantidadProducto" method="post"
                         style="display: inline;">
                         <input type="hidden" asp-for="Presupuesto.IdPresupuesto" />
                         <input type="hidden" asp-for="idProductoSeleccionado" value="@detalle.Producto.Idproducto" />
-                        <button type="submit" class="btn btn-warning btn-sm">Sumar</button>
+                        <button type="submit" class="btn btn-warning btn-sm">+</button>
                     </form>
-
                 </td>
             </tr>
         }
     </tbody>
-</table>
+</table> 
 
 <div class="text-center">
     <a asp-controller="Presupuesto" asp-action="Listar" class="btn btn-secondary">Volver</a>
