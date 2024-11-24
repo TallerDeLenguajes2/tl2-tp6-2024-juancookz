@@ -142,7 +142,8 @@ public class PresupuestoRepository
         {
             return false;
         }
-        string query = @"INSERT INTO PresupuestosDetalle (idPresupuesto, idProducto, Cantidad) VALUES (@idPresupuesto, @idProducto, @cantidad) ON CONFLICT(idPresupuesto, idProducto) DO UPDATE SET Cantidad = Cantidad + @cantidad;";
+        string query = @"INSERT INTO PresupuestosDetalle (idPresupuesto, idProducto, Cantidad) VALUES (@idPresupuesto, @idProducto, @cantidad) 
+        ON CONFLICT(idPresupuesto, idProducto) DO UPDATE SET Cantidad = Cantidad + @cantidad;";
         using (SqliteConnection connection = new SqliteConnection(_stringConnection))
         {
             connection.Open();
@@ -150,6 +151,25 @@ public class PresupuestoRepository
             command.Parameters.AddWithValue("@idPresupuesto", idPresupuesto);
             command.Parameters.AddWithValue("@idProducto", idProducto);
             command.Parameters.AddWithValue("@cantidad", cantidad);
+            command.ExecuteNonQuery();
+            connection.Close();
+        }
+        return true;
+    }
+    public bool RemoveProduct(int idProducto, int idPresupuesto)
+    {
+        var productoRepository = new ProductoRepository(_stringConnection);
+        if (GetById(idPresupuesto) == null || productoRepository.Get(idProducto) == null)
+        {
+            return false;
+        }
+        string query = @"UPDATE PresupuestosDetalle SET Cantidad = Cantidad - 1 WHERE idPresupuesto = @idPresupuesto AND idProducto = @idProducto;";
+        using (SqliteConnection connection = new SqliteConnection(_stringConnection))
+        {
+            connection.Open();
+            SqliteCommand command = new SqliteCommand(query, connection);
+            command.Parameters.AddWithValue("@idPresupuesto", idPresupuesto);
+            command.Parameters.AddWithValue("@idProducto", idProducto);
             command.ExecuteNonQuery();
             connection.Close();
         }
